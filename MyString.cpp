@@ -6,10 +6,11 @@
 #include <iostream>
 
 MyString::MyString(const char* s) {
-
+    if(s != nullptr){
     size = strlen(s);
     str = new char[size + 1];
     strcpy(str, s);
+    }
 }
 
 MyString::MyString(const MyString& other) {
@@ -21,6 +22,7 @@ MyString::MyString(const MyString& other) {
 MyString::~MyString() {
     delete[] str;
 }
+
 int MyString::strlen(const char* s){
     int i = 0;
     while(s[i] != '\0'){
@@ -39,7 +41,9 @@ char* MyString::strcpy(char* str, const char* s){
 }
 void MyString::print() {
     std::cout << str << std::endl;
-    std::cout << size << std::endl;
+}
+char* MyString::printarr(){
+    return str;
 }
 
 void MyString::change(const char* s) {
@@ -51,4 +55,5 @@ void MyString::change(const char* s) {
 void MyString::parseString(const char *s) {
     size = strlen(s);
 }
+
 

@@ -8,18 +8,20 @@
 
 #include "MyString.h"
 
-class DoubleLinkedList : public MyString {
+class DoubleLinkedList {
 private:
     struct Node{
-        MyString data;
-        Node* next;
-        Node* prev;
+        MyString* data = nullptr;
+        Node* next = nullptr;
+        Node* prev = nullptr;
     };
-    struct Node *head = NULL;
-    struct Node *tail = NULL;
+    struct Node *head = nullptr;
+    struct Node *tail = nullptr;
 public:
     DoubleLinkedList();
-    void InsertNodeAtTail(int data);
+    void InsertNodeAtFront(MyString* newValue);
+    void InsertNodeAtTail(MyString *newValue);
+    void PrintList();
     ~DoubleLinkedList();
 
 };
