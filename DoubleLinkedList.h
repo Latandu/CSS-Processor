@@ -7,11 +7,20 @@
 
 
 #include "MyString.h"
-
-class DoubleLinkedList {
+#include "SingleLinkedList.h"
+#define T 8
+class DoubleLinkedList : public SingleLinkedList{
 private:
+    struct ArrayBlock{
+        SingleLinkedList* attributes = nullptr;
+        SingleLinkedList* selectors = nullptr;
+        short counterAtt = 0, counterSel = 0;
+        bool isWritten = false;
+    };
     struct Node{
+        struct ArrayBlock arrayBlock[T];
         MyString* data = nullptr;
+        short nodeIndex = 0;
         Node* next = nullptr;
         Node* prev = nullptr;
     };
@@ -19,9 +28,10 @@ private:
     struct Node *tail = nullptr;
 public:
     DoubleLinkedList();
-    void InsertNodeAtFront(MyString* newValue);
-    void InsertNodeAtTail(MyString *newValue);
-    void PrintList();
+    void RemoveNode(short index );
+    void InsertNodeAtTail();
+    void InsertSelectorAttributesIntoNode(MyString* newValue, MyString *newAttribute, struct Node* position);
+    void PrintList() override;
     ~DoubleLinkedList();
 
 };

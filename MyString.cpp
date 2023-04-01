@@ -4,9 +4,9 @@
 
 #include "MyString.h"
 #include <iostream>
-
+#define BUFFER 1000
 MyString::MyString(const char* s) {
-    if(s != nullptr){
+    if(s){
     size = strlen(s);
     str = new char[size + 1];
     strcpy(str, s);
@@ -23,6 +23,19 @@ MyString::~MyString() {
     delete[] str;
 }
 
+char *MyString::addchar(char *str, int* reservedSize, char newChar) {
+    int len = strlen(str);
+    char *newStr = nullptr;
+    if(len > *reservedSize){
+        *reservedSize += BUFFER;
+        newStr = new char[*reservedSize];
+        strcpy(newStr, str);
+    }
+    newStr[len] = newChar;
+    newStr[len + 1] = '\0';
+    delete str;
+    return newStr;
+}
 int MyString::strlen(const char* s){
     int i = 0;
     while(s[i] != '\0'){
@@ -44,16 +57,6 @@ void MyString::print() {
 }
 char* MyString::printarr(){
     return str;
-}
-
-void MyString::change(const char* s) {
-    delete[] str;
-    size = strlen(s);
-    str = new char[size + 1];
-    strcpy(str,s);
-}
-void MyString::parseString(const char *s) {
-    size = strlen(s);
 }
 
 
