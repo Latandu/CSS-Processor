@@ -20,23 +20,31 @@ MyString::MyString(const MyString& other) {
 }
 
 MyString::~MyString() {
-    delete[] str;
 }
 
-char *MyString::addchar(char *str, int* reservedSize, char newChar) {
+char *MyString::addchar(char *str, int& reservedSize, char newChar) {
+    char* newStr = nullptr;
     int len = strlen(str);
-    char *newStr = nullptr;
-    if(len > *reservedSize){
-        *reservedSize += BUFFER;
-        newStr = new char[*reservedSize];
-        strcpy(newStr, str);
+    if (len + 2 > reservedSize) {
+        reservedSize += BUFFER;
+        newStr = new char[reservedSize];
+        if (str != nullptr) {
+            strcpy(newStr, str);
+        }
+        else {
+            newStr[0] = '\0';
+        }
+    }
+    else {
+        newStr = str;
     }
     newStr[len] = newChar;
     newStr[len + 1] = '\0';
-    delete str;
+    std::cout << newStr[len + 1];
     return newStr;
 }
 int MyString::strlen(const char* s){
+    if(s == nullptr) return 0;
     int i = 0;
     while(s[i] != '\0'){
         i++;
@@ -57,6 +65,10 @@ void MyString::print() {
 }
 char* MyString::printarr(){
     return str;
+}
+
+MyString::MyString() {
+
 }
 
 

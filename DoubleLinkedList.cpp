@@ -37,17 +37,29 @@ void DoubleLinkedList::InsertNodeAtTail() {
     newNode->prev = tail;
     newNode->nodeIndex = counter;
 }
-void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute, struct Node* position) {
+void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
+                                                        struct Node* position, int attlistCounter, int selListCounter) {
+    static short sectionCounter;
     if(!position) position = head;
+    if(!position && !tail) position = tail;
     struct Node *selectorNode = position;
-    ParseString parse;
     while(selectorNode){
         for(int i = 0; i < T; i++){
             if(!selectorNode->arrayBlock[i].isWritten){
+                int j = 0;
                 selectorNode->arrayBlock[i].selectors = new SingleLinkedList();
-                selectorNode->arrayBlock[i].attributes = new SingleLinkedList();
-                selectorNode->arrayBlock[i].selectors->InsertNodeAtTail(newSelector);
-                selectorNode->arrayBlock[i].attributes->InsertNodeAtTail(newAttribute);
+                selectorNode->arrayBlock[i].attributes = new SSLAtt();
+                while(j < selListCounter){
+                    selectorNode->arrayBlock[i].selectors->InsertNodeAtTail(&newSelector[j]);
+                    j++;
+                }
+                j = 0;
+                while(j < attlistCounter){
+                    selectorNode->arrayBlock[i].attributes->InsertNodeAtTail(&newAttribute[j], &newAttributeVal[j]);
+                    j++;
+                }
+                sectionCounter++;
+                selectorNode->nodeIndex = sectionCounter;
                 selectorNode->arrayBlock[i].isWritten = true;
                 return;
             }
@@ -56,9 +68,11 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
     }
     tail = selectorNode;
     InsertNodeAtTail();
-    InsertSelectorAttributesIntoNode(newSelector, newAttribute, tail);
+
+    InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, tail, attlistCounter, selListCounter);
 
 }
+
 void DoubleLinkedList::RemoveNode(short index) {
     struct Node *nodeDeletion = head;
     int counter = 1;
@@ -78,8 +92,9 @@ void DoubleLinkedList::RemoveNode(short index) {
 void DoubleLinkedList::PrintList() {
     struct Node *curr = head;
     while(curr){
-        curr->arrayBlock[0].selectors->PrintList();
-        curr->arrayBlock[0].attributes->PrintList();
+     //   curr->arrayBlock[0].selectors->PrintList();
+     //   curr->arrayBlock[0].attributes->PrintList();
+        std::cout << curr->nodeIndex;
         curr = curr->next;
     }
 }

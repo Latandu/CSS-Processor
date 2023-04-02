@@ -8,32 +8,34 @@
 
 #include "MyString.h"
 #include "SingleLinkedList.h"
+#include "SSLAtt.h"
 #define T 8
-class DoubleLinkedList : public SingleLinkedList{
+class DoubleLinkedList {
 private:
+
+public:
     struct ArrayBlock{
-        SingleLinkedList* attributes = nullptr;
+        SSLAtt* attributes = nullptr;
         SingleLinkedList* selectors = nullptr;
         short counterAtt = 0, counterSel = 0;
         bool isWritten = false;
     };
     struct Node{
         struct ArrayBlock arrayBlock[T];
-        MyString* data = nullptr;
         short nodeIndex = 0;
         Node* next = nullptr;
         Node* prev = nullptr;
     };
     struct Node *head = nullptr;
     struct Node *tail = nullptr;
-public:
     DoubleLinkedList();
-    void RemoveNode(short index );
+    void RemoveNode(short index);
     void InsertNodeAtTail();
-    void InsertSelectorAttributesIntoNode(MyString* newValue, MyString *newAttribute, struct Node* position);
-    void PrintList() override;
+    void InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
+                                          struct Node* position, int attlistCounter, int selListCounter);
+    void PrintList();
     ~DoubleLinkedList();
-
+    void InsertSelectorIntoNode(MyString *newSelector, Node *position);
 };
 
 

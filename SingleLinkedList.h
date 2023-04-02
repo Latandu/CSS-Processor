@@ -13,13 +13,14 @@ private:
     struct SingleNode{
         MyString* data;
         SingleNode* next;
+        int SelectorCounter;
     };
     struct SingleNode* tail;
     struct SingleNode* head;
 public:
     SingleLinkedList();
 
-    void InsertNodeAtTail(MyString* data);
+    void InsertNodeAtTail(MyString* selector);
 
     virtual void PrintList();
     ~SingleLinkedList();

@@ -7,22 +7,23 @@
 
 
 #include "MyString.h"
-
+#include "DoubleLinkedList.h"
 class ParseString {
 private:
     int buff = 1000;
     char* arr;
     int iteration = 0;
-    int* reservedSize;
+    int reservedSize = 0;
 public:
-    MyString selectors = " ";
-    MyString attributes = " ";
-    MyString attributesValues = " ";
+    MyString selectors;
+    MyString attributes;
+    MyString attributesValues;
     ParseString();
-    void Parsing();
+    void Parsing(DoubleLinkedList* dll);
     void PrintArr();
     ~ParseString();
 
+    bool checkForWhiteSpaces(char c);
 };
 
 

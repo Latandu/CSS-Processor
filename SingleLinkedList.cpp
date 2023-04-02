@@ -6,10 +6,12 @@
 
 SingleLinkedList::SingleLinkedList(): head(nullptr), tail() {}
 
-void SingleLinkedList::InsertNodeAtTail(MyString* newValue) {
+void SingleLinkedList::InsertNodeAtTail(MyString* newSelector) {
+    static short selectorCounter = 0;
     auto* newNode = new SingleNode();
-    newNode->data = newValue;
+    newNode->data = newSelector;
     newNode->next = nullptr;
+    newNode->SelectorCounter = selectorCounter;
     if(!head){
         newNode->next = nullptr;
         head = newNode;
