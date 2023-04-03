@@ -52,6 +52,32 @@ int MyString::strlen(const char* s){
     return i;
 
 }
+bool MyString::compare(const MyString& other) const {
+    if (size != other.size) {
+        return false;
+    }
+    for (int i = 0; i < size; i++) {
+        if (str[i] != other.str[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+void MyString::trim(char* str){
+    int i = 0, j = 0;
+    while(str[i] == ' '){
+        i++;
+    }
+    while(str[i] != '\0'){
+        str[j] = str[i];
+        i++; j++;
+    }
+    j--;
+    while(str[j] == ' '){
+        j--;
+    }
+    str[j + 1] = '\0';
+}
 char* MyString::strcpy(char* str, const char* s){
     char* ptr = str;
     while(*s != '\0'){

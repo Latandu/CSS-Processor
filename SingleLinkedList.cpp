@@ -7,11 +7,9 @@
 SingleLinkedList::SingleLinkedList(): head(nullptr), tail() {}
 
 void SingleLinkedList::InsertNodeAtTail(MyString* newSelector) {
-    static short selectorCounter = 0;
-    auto* newNode = new SingleNode();
+    auto* newNode = new struct SingleNode();
     newNode->data = newSelector;
     newNode->next = nullptr;
-    newNode->SelectorCounter = selectorCounter;
     if(!head){
         newNode->next = nullptr;
         head = newNode;
@@ -22,6 +20,7 @@ void SingleLinkedList::InsertNodeAtTail(MyString* newSelector) {
         tail = tail->next;
     }
     tail->next = newNode;
+    newNode->selectorCounter = tail->selectorCounter + 1;
 
 
 };

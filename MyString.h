@@ -20,6 +20,10 @@ public:
     char *printarr();
 
     MyString();
+
+    bool compare(const MyString &other) const;
+
+    void trim(char *str);
 };
 
 #endif // MY_STRING_H

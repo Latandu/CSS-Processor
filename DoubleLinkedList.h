@@ -17,15 +17,16 @@ public:
     struct ArrayBlock{
         SSLAtt* attributes = nullptr;
         SingleLinkedList* selectors = nullptr;
-        short counterAtt = 0, counterSel = 0;
+        short arraySectionCounter = 0;
         bool isWritten = false;
     };
     struct Node{
         struct ArrayBlock arrayBlock[T];
-        short nodeIndex = 0;
+        short nodeIndex = 1;
         Node* next = nullptr;
         Node* prev = nullptr;
     };
+    short sectionCounter = 1;
     struct Node *head = nullptr;
     struct Node *tail = nullptr;
     DoubleLinkedList();
@@ -35,7 +36,11 @@ public:
                                           struct Node* position, int attlistCounter, int selListCounter);
     void PrintList();
     ~DoubleLinkedList();
-    void InsertSelectorIntoNode(MyString *newSelector, Node *position);
+    void PrintNumberOfSections();
+
+    void PrintNumberOfSelectors(int sectionNo);
+
+    void PrintJthSelector(int sectionNo, int selectorNo);
 };
 
 

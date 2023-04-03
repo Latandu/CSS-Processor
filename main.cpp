@@ -3,13 +3,12 @@
 #include "DoubleLinkedList.h"
 #include "SingleLinkedList.h"
 #include "ParseString.h"
+#include "Commands.h"
+
 int main() {
-    MyString str1 = "h1";
-    MyString str2 = "h22";
     DoubleLinkedList dll;
     ParseString parse;
-    parse.Parsing(&dll);
-    dll.PrintList();
+    parse.ParseWholeString(&dll);
     return 0;
 
 

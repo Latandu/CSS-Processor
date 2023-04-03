@@ -6,8 +6,19 @@
 #define PROJECT1_COMMANDS_H
 
 
-class Commands {
+#include "DoubleLinkedList.h"
 
+class Commands {
+private:
+
+public:
+    void commandQM(DoubleLinkedList* dll);
+    Commands();
+    ~Commands();
+
+    void commandSelectorForSection(DoubleLinkedList *dll, int sectionNo);
+
+    void commandPrintJthSelector(DoubleLinkedList *dll, int sectionNo, int selectorNo);
 };
 
 

@@ -10,14 +10,14 @@
 
 class SingleLinkedList {
 private:
+public:
     struct SingleNode{
         MyString* data;
         SingleNode* next;
-        int SelectorCounter;
-    };
+        int selectorCounter = 1;
+    } SingleNode;
     struct SingleNode* tail;
     struct SingleNode* head;
-public:
     SingleLinkedList();
 
     void InsertNodeAtTail(MyString* selector);

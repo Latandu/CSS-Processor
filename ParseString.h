@@ -14,16 +14,21 @@ private:
     char* arr;
     int iteration = 0;
     int reservedSize = 0;
+    int secondReservedSize = 0;
 public:
     MyString selectors;
     MyString attributes;
     MyString attributesValues;
     ParseString();
-    void Parsing(DoubleLinkedList* dll);
+    int Parsing(DoubleLinkedList* dll);
     void PrintArr();
     ~ParseString();
 
-    bool checkForWhiteSpaces(char c);
+    static bool checkForWhiteSpaces(char c);
+
+    int ParseCommands(DoubleLinkedList *dll);
+
+    void ParseWholeString(DoubleLinkedList *dll);
 };
 
 

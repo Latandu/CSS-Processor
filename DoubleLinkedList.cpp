@@ -7,7 +7,8 @@
 #include "ParseString.h"
 #include <iostream>
 #define T 8
-DoubleLinkedList::DoubleLinkedList() : head(nullptr), tail(){}
+DoubleLinkedList::DoubleLinkedList() : head(nullptr), tail(){
+}
 /*void DoubleLinkedList::InsertNodeAtFront(MyString* newValue) {
     auto* newNode = new Node();
     newNode->data = newValue;
@@ -39,9 +40,7 @@ void DoubleLinkedList::InsertNodeAtTail() {
 }
 void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
                                                         struct Node* position, int attlistCounter, int selListCounter) {
-    static short sectionCounter;
     if(!position) position = head;
-    if(!position && !tail) position = tail;
     struct Node *selectorNode = position;
     while(selectorNode){
         for(int i = 0; i < T; i++){
@@ -58,8 +57,8 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
                     selectorNode->arrayBlock[i].attributes->InsertNodeAtTail(&newAttribute[j], &newAttributeVal[j]);
                     j++;
                 }
+                selectorNode->arrayBlock[i].arraySectionCounter = sectionCounter;
                 sectionCounter++;
-                selectorNode->nodeIndex = sectionCounter;
                 selectorNode->arrayBlock[i].isWritten = true;
                 return;
             }
@@ -70,7 +69,7 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
     InsertNodeAtTail();
 
     InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, tail, attlistCounter, selListCounter);
-
+    delete selectorNode;
 }
 
 void DoubleLinkedList::RemoveNode(short index) {
@@ -89,19 +88,51 @@ void DoubleLinkedList::RemoveNode(short index) {
 
 
 }
-void DoubleLinkedList::PrintList() {
+void DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
     struct Node *curr = head;
     while(curr){
+        for(int i = 0; i < T; i++){
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
+                std::cout << curr->arrayBlock[i].selectors->head->selectorCounter << std::endl;
+                return;
+        }
      //   curr->arrayBlock[0].selectors->PrintList();
      //   curr->arrayBlock[0].attributes->PrintList();
-        std::cout << curr->nodeIndex;
+     }
         curr = curr->next;
     }
+}
+void DoubleLinkedList::PrintJthSelector(int sectionNo, int selectorNo){
+    struct Node *curr = head;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
+                struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
+                while(curr2){
+                    if(curr2->selectorCounter == selectorNo){
+                        curr2->data->print();
+                        return;
+                    }
+                    curr2 = curr2->next;
+                }
+                return;
+            }
+        }
+        curr = curr->next;
+    }
+}
+void DoubleLinkedList::PrintNumberOfSections(){
+    std::cout << sectionCounter - 1 << std::endl;
 }
 DoubleLinkedList::~DoubleLinkedList(){
     while (head){
         struct Node* curr = head;
+        for(int i = 0; i < T; i++){
+           delete curr->arrayBlock[i].selectors->head;
+        }
         head = head->next;
+        // delete[] curr->arrayBlock;
         delete curr;
+
     }
 }
