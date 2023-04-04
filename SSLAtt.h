@@ -9,15 +9,16 @@
 class SSLAtt {
 private:
 private:
+
+public:
     struct SingleNode{
         MyString* attributes;
         MyString* attValues;
         SingleNode* next;
-        short attCounter = 0;
+        int attCounter = 1;
     };
     struct SingleNode* tail;
     struct SingleNode* head;
-public:
     SSLAtt();
 
     void InsertNodeAtTail(MyString* newAttributes, MyString* newAttributesVal);

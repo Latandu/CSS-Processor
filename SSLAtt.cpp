@@ -7,11 +7,9 @@
 SSLAtt::SSLAtt(): head(nullptr), tail() {}
 
 void SSLAtt::InsertNodeAtTail(MyString* newAttributes, MyString* newAttributesVal) {
-    short attCounter = 0;
     auto* newNode = new SingleNode();
     newNode->attributes= newAttributes;
     newNode->attValues = newAttributesVal;
-    newNode->attCounter = attCounter;
     newNode->next = nullptr;
     if(!head){
         newNode->next = nullptr;
@@ -23,7 +21,7 @@ void SSLAtt::InsertNodeAtTail(MyString* newAttributes, MyString* newAttributesVa
         tail = tail->next;
     }
     tail->next = newNode;
-
+    newNode->attCounter = tail->attCounter + 1;
 
 };
 void SSLAtt::PrintList() {

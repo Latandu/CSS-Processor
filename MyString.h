@@ -20,7 +20,7 @@ public:
     char *printarr();
 
     MyString();
-
+    int concatenate(MyString *str1, MyString* str2);
     bool compare(const MyString &other) const;
 
     void trim(char *str);

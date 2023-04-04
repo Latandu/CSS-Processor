@@ -3,4 +3,4 @@ project(Project1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Project1 main.cpp MyString.cpp MyString.h DoubleLinkedList.cpp DoubleLinkedList.h SingleLinkedList.cpp SingleLinkedList.h ParseString.cpp ParseString.h SSLAtt.cpp SSLAtt.h Commands.cpp Commands.h)
+add_executable(Project1 main.cpp MyString.cpp MyString.h DoubleLinkedList.cpp DoubleLinkedList.h SingleLinkedList.cpp SingleLinkedList.h ParseString.cpp ParseString.h SSLAtt.cpp SSLAtt.h)

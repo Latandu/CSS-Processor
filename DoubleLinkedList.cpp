@@ -27,6 +27,7 @@ void DoubleLinkedList::InsertNodeAtTail() {
         newNode->nodeIndex = 1;
         newNode->prev = nullptr;
         head = newNode;
+        delete[] newArrayBlock;
         return;
     }
     tail = head;
@@ -37,10 +38,11 @@ void DoubleLinkedList::InsertNodeAtTail() {
     tail->next = newNode;
     newNode->prev = tail;
     newNode->nodeIndex = counter;
+    delete[] newArrayBlock;
 }
 void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
                                                         struct Node* position, int attlistCounter, int selListCounter) {
-    if(!position) position = head;
+    if(!position) position = tail;
     struct Node *selectorNode = position;
     while(selectorNode){
         for(int i = 0; i < T; i++){
@@ -88,51 +90,124 @@ void DoubleLinkedList::RemoveNode(short index) {
 
 
 }
-void DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
+MyString DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
     struct Node *curr = head;
+    MyString numbersExit = "-1";
     while(curr){
         for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
             if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
-                std::cout << curr->arrayBlock[i].selectors->head->selectorCounter << std::endl;
-                return;
+                char s[11];
+                sprintf_s(s, "%d", curr->arrayBlock[i].selectors->head->selectorCounter);
+                MyString number = s;
+                return number;
         }
      //   curr->arrayBlock[0].selectors->PrintList();
      //   curr->arrayBlock[0].attributes->PrintList();
      }
         curr = curr->next;
     }
+    return numbersExit;
 }
-void DoubleLinkedList::PrintJthSelector(int sectionNo, int selectorNo){
+MyString* DoubleLinkedList::PrintJthSelector(int sectionNo, int selectorNo){
     struct Node *curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
             if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
                 struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
                 while(curr2){
                     if(curr2->selectorCounter == selectorNo){
-                        curr2->data->print();
-                        return;
+                        return curr2->data;
                     }
                     curr2 = curr2->next;
                 }
-                return;
+                return nullptr;
             }
         }
         curr = curr->next;
     }
+    return nullptr;
 }
-void DoubleLinkedList::PrintNumberOfSections(){
-    std::cout << sectionCounter - 1 << std::endl;
+MyString DoubleLinkedList::PrintNumberOfSections(){
+    char s[11];
+    sprintf_s(s, "%d", sectionCounter - 1);
+    MyString number = s;
+    return number;
+}
+MyString DoubleLinkedList::SearchForSelectorsByName(MyString *selectorName){
+    int x = 0;
+    struct Node* curr = head;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
+            while(curr2){
+                if(curr2->data->compare(*selectorName)){
+                    x++;
+                }
+                curr2 = curr2->next;
+            }
+        }
+        curr = curr->next;
+    }
+    char s[11];
+    sprintf_s(s, "%d", x);
+    MyString number = s;
+    return number;
+}
+
+MyString DoubleLinkedList::NumberOfAttributes(int sectionNo){
+    int x = 0;
+    MyString number;
+    MyString numbersExit = "-1";
+    struct Node* curr = head;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
+                struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+                while(curr2){
+                        x = curr2->attCounter;
+                    curr2 = curr2->next;
+                }
+                char s[11];
+                sprintf_s(s, "%d", x);
+                number = s;
+                return number;
+            }
+        }
+        curr = curr->next;
+    }
+    return numbersExit;
+}
+/*void DoubleLinkedList::NumberOfAttributesName(MyString *selectorName){
+
+}*/
+MyString* DoubleLinkedList::AttributeValueByName(MyString attributeName, int sectionNo){
+    struct Node* curr = head;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
+                struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+                while(curr2){
+                    if(curr2->attributes->compare(attributeName)){
+                        return curr2->attValues;
+                    }
+                    curr2 = curr2->next;
+                }
+            }
+        }
+        curr = curr->next;
+    }
+    return nullptr;
 }
 DoubleLinkedList::~DoubleLinkedList(){
-    while (head){
-        struct Node* curr = head;
-        for(int i = 0; i < T; i++){
-           delete curr->arrayBlock[i].selectors->head;
-        }
-        head = head->next;
-        // delete[] curr->arrayBlock;
-        delete curr;
-
+    Node* current = head;
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current;
+        current = next;
     }
 }

@@ -36,11 +36,17 @@ public:
                                           struct Node* position, int attlistCounter, int selListCounter);
     void PrintList();
     ~DoubleLinkedList();
-    void PrintNumberOfSections();
+    MyString PrintNumberOfSections();
 
-    void PrintNumberOfSelectors(int sectionNo);
+    MyString PrintNumberOfSelectors(int sectionNo);
 
-    void PrintJthSelector(int sectionNo, int selectorNo);
+    MyString* PrintJthSelector(int sectionNo, int selectorNo);
+
+    MyString SearchForSelectorsByName(MyString *selectorName);
+
+    MyString NumberOfAttributes(int sectionNo);
+
+    MyString* AttributeValueByName(MyString attributeName, int sectionNo);
 };
 
 

@@ -15,6 +15,7 @@ private:
     int iteration = 0;
     int reservedSize = 0;
     int secondReservedSize = 0;
+    int thirdReservedSize = 0;
 public:
     MyString selectors;
     MyString attributes;

@@ -1,7 +1,7 @@
 //
 // Created by Latandu on 29/03/2023.
 //
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "MyString.h"
 #include <iostream>
 #define BUFFER 1000
@@ -40,7 +40,6 @@ char *MyString::addchar(char *str, int& reservedSize, char newChar) {
     }
     newStr[len] = newChar;
     newStr[len + 1] = '\0';
-    std::cout << newStr[len + 1];
     return newStr;
 }
 int MyString::strlen(const char* s){
@@ -51,6 +50,11 @@ int MyString::strlen(const char* s){
     }
     return i;
 
+}
+int MyString::concatenate(MyString *str1, MyString* str2){
+    if(str2->compare("-1")) return 1;
+    strcat(str1->printarr(), str2->printarr());
+    return 0;
 }
 bool MyString::compare(const MyString& other) const {
     if (size != other.size) {
