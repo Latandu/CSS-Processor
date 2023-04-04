@@ -11,7 +11,6 @@
 class ParseString {
 private:
     int buff = 1000;
-    char* arr;
     int iteration = 0;
     int reservedSize = 0;
     int secondReservedSize = 0;

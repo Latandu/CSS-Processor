@@ -33,7 +33,7 @@ public:
     void RemoveNode(short index);
     void InsertNodeAtTail();
     void InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
-                                          struct Node* position, int attlistCounter, int selListCounter);
+                                          int attlistCounter, int selListCounter);
     void PrintList();
     ~DoubleLinkedList();
     MyString PrintNumberOfSections();

@@ -4,7 +4,6 @@
 
 #include "MyString.h"
 #include "DoubleLinkedList.h"
-#include "ParseString.h"
 #include <iostream>
 #define T 8
 DoubleLinkedList::DoubleLinkedList() : head(nullptr), tail(){
@@ -40,10 +39,10 @@ void DoubleLinkedList::InsertNodeAtTail() {
     newNode->nodeIndex = counter;
     delete[] newArrayBlock;
 }
-void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal,
-                                                        struct Node* position, int attlistCounter, int selListCounter) {
-    if(!position) position = tail;
-    struct Node *selectorNode = position;
+void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal, int attlistCounter, int selListCounter) {
+    struct Node *selectorNode;
+    if(!tail) selectorNode = head;
+    else selectorNode = tail;
     while(selectorNode){
         for(int i = 0; i < T; i++){
             if(!selectorNode->arrayBlock[i].isWritten){
@@ -69,8 +68,7 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
     }
     tail = selectorNode;
     InsertNodeAtTail();
-
-    InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, tail, attlistCounter, selListCounter);
+    InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, attlistCounter, selListCounter);
     delete selectorNode;
 }
 
@@ -91,14 +89,20 @@ void DoubleLinkedList::RemoveNode(short index) {
 
 }
 MyString DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
+    int i = 0;
     struct Node *curr = head;
     MyString numbersExit = "-1";
     while(curr){
         for(int i = 0; i < T; i++){
             if(!curr->arrayBlock[i].isWritten) continue;
             if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
+                struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
+                while(curr2){
+                    if(curr2->next == nullptr) break;
+                    curr2 = curr2->next;
+                }
                 char s[11];
-                sprintf_s(s, "%d", curr->arrayBlock[i].selectors->head->selectorCounter);
+                sprintf_s(s, "%d", curr2->selectorCounter);
                 MyString number = s;
                 return number;
         }
