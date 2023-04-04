@@ -57,10 +57,12 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
         int numberOfComma = 0;
         int tolA = 0;
         int tolE = 0;
+        int tolD = 0;
         int errorCode = 0;
         bool commandS = false;
         bool commandA = false;
         bool commandE = false;
+        bool commandD = false;
         int returnValue = 0;
         while ((c = (char) getchar()) != '\n') {
             if ((int) (int) c == EOF) break;
@@ -116,6 +118,16 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                 if (c == 'E') {
                     commandZ = commandsArr;
                     commandE = true;
+                    secondReservedSize = 0;
+                    continue;
+                }
+                if(c == 'D'){
+                    tolD = strtol(commandsArr, &pEnd, 10);
+                    if(tolD == 0){
+                        break;
+                    }
+                    commandsArr = nullptr;
+                    commandD = true;
                     secondReservedSize = 0;
                     continue;
                 }
@@ -175,7 +187,6 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                             break;
                         }
                         if (commandNR == 4) {
-                            //TODO IMPLEMENT DUPLICATES SEARCH
                             MyString fullCommand = fullCommandArr;
                             stringCommands.concatenate(&fullCommand, &equals);
                             MyString fullValue = dll->NumberOfAttributesSelectedByName(commandZ);
@@ -217,6 +228,30 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                      if (fullValue == nullptr) break;
                     returnCode = stringCommands.concatenate(&fullCommand, fullValue);
                     if (returnCode == 0) fullCommand.print();
+                    break;
+                }
+                if(commandD){
+                    if(c == '*'){
+                        MyString attributeName = lastSectionArr;
+                        MyString fullCommand = fullCommandArr;
+                        stringCommands.concatenate(&fullCommand, &equals);
+                     //   MyString fullValue= dll->RemoveWholeSection(tolD);
+                    //    returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
+                    //    if (returnCode == 0) fullCommand.print();
+                        break;
+                    }
+                    while (c != '\n' && c != ',') {
+                        lastSectionArr = stringCommands.addchar(lastSectionArr, reservedSize, c);
+                        c = (char) getchar();
+                        if (c != '\n')
+                            fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
+                    }
+                    MyString attributeName = lastSectionArr;
+                    MyString fullCommand = fullCommandArr;
+                    stringCommands.concatenate(&fullCommand, &equals);
+                //   MyString fullValue = dll->RemoveAttributeFromSectionByName(tolD, attributeName);
+                  //  returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
+                 //   if (returnCode == 0) fullCommand.print();
                     break;
                 }
                 }

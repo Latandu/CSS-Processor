@@ -16,6 +16,7 @@ public:
         SingleNode* next;
         int selectorCounter = 1;
     } SingleNode;
+    int globalCoutner = 0;
     struct SingleNode* tail;
     struct SingleNode* head;
     SingleLinkedList();

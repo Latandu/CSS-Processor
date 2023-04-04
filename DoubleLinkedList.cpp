@@ -251,6 +251,98 @@ MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attrib
     }
     return nullptr;
 }
+/*MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
+    MyString exitString = "deleted";
+    MyString exitStringFail = "-1";
+    int counter = 0;
+    short deleted = 0;
+    int success = 0;
+    struct Node* curr = head;
+    struct Node* awaitingDeletion = nullptr;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            else counter++;
+            if(deleted == 1){
+                curr->arrayBlock[i].arraySectionCounter = curr->arrayBlock[i].arraySectionCounter - deleted;
+
+            }
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo && deleted == 0) {
+                delete curr->arrayBlock[i].selectors;
+                delete curr->arrayBlock[i].attributes;
+                curr->arrayBlock[i].arraySectionCounter = 0;
+                curr->arrayBlock[i].isWritten = false;
+                deleted++;
+                sectionCounter = sectionCounter - deleted;
+                success = 1;
+                continue;
+            }
+        }
+        if(counter == 1){
+            if(head == curr) head = curr->next;
+            if(curr->next != nullptr) curr->next->prev = curr->prev;
+            if(curr->prev != nullptr) curr->prev->next = curr->next;
+            awaitingDeletion = curr;
+        }
+        curr = curr->next;
+    }
+    delete awaitingDeletion;
+    if(success == 1) return exitString;
+    return exitStringFail;
+}
+MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyString attributeName){
+    MyString exitString = "deleted";
+    MyString exitStringFail = "-1";
+    int deleted = 0;
+    int success = 0;
+    struct Node* curr = head;
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo) {
+                struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+                struct SSLAtt::SingleNode *prev = nullptr;
+                while(curr2){
+                    if(deleted == 0){
+                        if(curr2->attributes->compare(attributeName)){
+                            if(nullptr == curr->arrayBlock[i].attributes->tail){
+                                delete curr->arrayBlock[i].selectors;
+                                delete curr->arrayBlock[i].attributes;
+                                deleted++;
+                                success = 1;
+                                sectionCounter--;
+                            }
+                            else if(prev == nullptr){
+                                curr2 = curr2->next;
+                                deleted++;
+                                success = 1;
+                                sectionCounter--;
+                            }
+                            else {
+                                prev->next = curr2->next;
+                                if (prev->next == nullptr) {
+                                    curr2 = prev;
+                                }
+                                deleted++;
+                                success = 1;
+                                sectionCounter--;
+                            }
+                        }
+                    }
+                    else{
+                        curr2->attCounter = curr2->attCounter - 1;
+                    }
+                    prev = curr2;
+                    curr2 = curr2->next;
+                }
+                if(success == 1) return exitString;
+                else return exitStringFail;
+            }
+        }
+        curr = curr->next;
+    }
+    return exitStringFail;
+}*/
 DoubleLinkedList::~DoubleLinkedList(){
     Node* current = head;
     while (current != nullptr) {

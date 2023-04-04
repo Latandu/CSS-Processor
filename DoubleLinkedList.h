@@ -51,6 +51,10 @@ public:
     MyString SearchForSelectorsByName(const MyString& selectorName);
 
     MyString* LastAttributeValueForSelector(const MyString &attributeName, const MyString &selector);
+
+    MyString RemoveWholeSection(int sectionNo);
+
+    MyString RemoveAttributeFromSectionByName(int sectionNo, MyString attributeName);
 };
 
 

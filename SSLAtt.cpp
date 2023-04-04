@@ -35,11 +35,11 @@ void SSLAtt::PrintList() {
 
 
 SSLAtt::~SSLAtt() {
-    while (head){
+    /*while (head){
         struct SingleNode* curr = head;
         head = head->next;
         delete curr->attValues;
         delete curr->attributes;
         delete curr;
-    }
+    }*/
 }

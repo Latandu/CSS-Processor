@@ -34,11 +34,5 @@ void SingleLinkedList::PrintList() {
 
 
 SingleLinkedList::~SingleLinkedList() {
-    while (head){
-        struct SingleNode* curr = head;
-        head = head->next;
-        delete curr->data;
-        delete curr;
-    }
 }
 
