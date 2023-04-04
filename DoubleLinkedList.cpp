@@ -139,7 +139,7 @@ MyString DoubleLinkedList::PrintNumberOfSections(){
     MyString number = s;
     return number;
 }
-MyString DoubleLinkedList::SearchForSelectorsByName(MyString *selectorName){
+MyString DoubleLinkedList::SearchForSelectorsByName(const MyString& selectorName){
     int x = 0;
     struct Node* curr = head;
     while(curr){
@@ -147,7 +147,7 @@ MyString DoubleLinkedList::SearchForSelectorsByName(MyString *selectorName){
             if(!curr->arrayBlock[i].isWritten) continue;
             struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
             while(curr2){
-                if(curr2->data->compare(*selectorName)){
+                if(curr2->data->compare(selectorName)){
                     x++;
                 }
                 curr2 = curr2->next;
@@ -188,7 +188,7 @@ MyString DoubleLinkedList::NumberOfAttributes(int sectionNo){
 /*void DoubleLinkedList::NumberOfAttributesName(MyString *selectorName){
 
 }*/
-MyString* DoubleLinkedList::AttributeValueByName(MyString attributeName, int sectionNo){
+MyString* DoubleLinkedList::AttributeValueByName(const MyString& attributeName, int sectionNo){
     struct Node* curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
@@ -204,6 +204,50 @@ MyString* DoubleLinkedList::AttributeValueByName(MyString attributeName, int sec
             }
         }
         curr = curr->next;
+    }
+    return nullptr;
+}
+MyString DoubleLinkedList::NumberOfAttributesSelectedByName(MyString attributeName){
+    int x = 0;
+    struct Node* curr = head;
+
+    while(curr){
+        for(int i = 0; i < T; i++){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+            while(curr2){
+                if(curr2->attributes->compare(attributeName)){
+                    x++;
+                }
+                curr2 =curr2->next;
+            }
+        }
+        curr = curr->next;
+    }
+    char s[11];
+    sprintf_s(s, "%d", x);
+    MyString number = s;
+    return number;
+}
+MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attributeName, const MyString& selector){
+    struct Node* curr = tail;
+    if(tail == nullptr) curr = head;
+        while(curr){
+        for(int i = T-1; i >= 0; i--){
+            if(!curr->arrayBlock[i].isWritten) continue;
+            struct SingleLinkedList::SingleNode *curr3 = curr->arrayBlock[i].selectors->head;
+            if(curr3 == nullptr) return nullptr;
+            if(curr3->data->compare(selector)){
+                struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+                while(curr2){
+                    if(curr2->attributes->compare(attributeName)){
+                        return curr2->attValues;
+                    }
+                        curr2 = curr2->next;
+                }
+            }
+        }
+        curr=curr->prev;
     }
     return nullptr;
 }

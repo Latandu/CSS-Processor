@@ -42,11 +42,15 @@ public:
 
     MyString* PrintJthSelector(int sectionNo, int selectorNo);
 
-    MyString SearchForSelectorsByName(MyString *selectorName);
-
     MyString NumberOfAttributes(int sectionNo);
 
-    MyString* AttributeValueByName(MyString attributeName, int sectionNo);
+    MyString* AttributeValueByName(const MyString& attributeName, int sectionNo);
+
+    MyString NumberOfAttributesSelectedByName(MyString attributeName);
+
+    MyString SearchForSelectorsByName(const MyString& selectorName);
+
+    MyString* LastAttributeValueForSelector(const MyString &attributeName, const MyString &selector);
 };
 
 

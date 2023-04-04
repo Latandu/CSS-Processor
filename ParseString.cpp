@@ -16,14 +16,14 @@ bool ParseString::checkForWhiteSpaces(char c){
     return false;
 }
 int ParseString::ParseCommands(DoubleLinkedList* dll){
-    while(true){
+    while(true) {
         reservedSize = 0;
         secondReservedSize = 0;
         thirdReservedSize = 0;
         char c = ' ';
-        char* commandsArr = nullptr;
-        char* lastSectionArr = nullptr;
-        char* fullCommandArr = nullptr;
+        char *commandsArr = nullptr;
+        char *lastSectionArr = nullptr;
+        char *fullCommandArr = nullptr;
         MyString stringCommands;
         MyString commandZ;
         MyString lastCommand;
@@ -34,41 +34,42 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
         char *pEnd;
         int tolS = 0;
         int tolA = 0;
+        int tolE = 0;
         bool commandS = false;
         bool commandA = false;
+        bool commandE = false;
         int returnValue = 0;
-        while((c = (char)getchar()) != '\n') {
-            if((int)(int)c == EOF) break;
-            if(c == '*'){
-                for(int i = 0; i < 3; i++){
-                    c = (char)getchar();
-                    if(c == '*') continue;
+        while ((c = (char) getchar()) != '\n') {
+            if ((int) (int) c == EOF) break;
+            if (c == '*') {
+                for (int i = 0; i < 3; i++) {
+                    c = (char) getchar();
+                    if (c == '*') continue;
                     else {
                         returnValue = 1;
                     }
                 }
-                if(returnValue == 1) continue;
+                if (returnValue == 1) continue;
                 return 2;
             }
             fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
-            if(c == '?'){
-                c = (char)getchar();
-                if(c == '\n'){
+            if (c == '?') {
+                c = (char) getchar();
+                if (c == '\n') {
                     MyString fullCommand = fullCommandArr;
                     stringCommands.concatenate(&fullCommand, &equals);
                     MyString fullValue = dll->PrintNumberOfSections();
                     returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                    if(returnCode == 0) fullCommand.print();
+                    if (returnCode == 0) fullCommand.print();
                     break;
-                }
-                else continue;
+                } else continue;
             }
-            if(c == ','){
-                c = (char)getchar();
+            if (c == ',') {
+                c = (char) getchar();
                 fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
-                if(c == 'S'){
+                if (c == 'S') {
                     tolS = strtol(commandsArr, &pEnd, 10);
-                    if(tolS == 0){
+                    if (tolS == 0) {
                         commandZ = commandsArr;
                         commandNR = 2;
                     } else commandNR = 1;
@@ -77,9 +78,9 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                     secondReservedSize = 0;
                     continue;
                 }
-                if(c == 'A'){
+                if (c == 'A') {
                     tolA = strtol(commandsArr, &pEnd, 10);
-                    if(tolA == 0){
+                    if (tolA == 0) {
                         commandZ = commandsArr;
                         commandNR = 4;
                     } else commandNR = 3;
@@ -88,15 +89,21 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                     secondReservedSize = 0;
                     continue;
                 }
+                if (c == 'E') {
+                    commandZ = commandsArr;
+                    commandE = true;
+                    secondReservedSize = 0;
+                    continue;
+                }
 
-                if(commandS) {
+                if (commandS) {
                     if (c == '?') {
                         if (commandNR == 2) {
                             MyString fullCommand = fullCommandArr;
                             stringCommands.concatenate(&fullCommand, &equals);
-                            MyString fullValue = dll->SearchForSelectorsByName(&commandZ);
+                            MyString fullValue = dll->SearchForSelectorsByName(commandZ);
                             returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                              if(returnCode == 0) fullCommand.print();
+                            if (returnCode == 0) fullCommand.print();
                             break;
                         }
                         if (commandNR == 1) {
@@ -104,76 +111,100 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                             stringCommands.concatenate(&fullCommand, &equals);
                             MyString fullValue = dll->PrintNumberOfSelectors(tolS);
                             returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                                if(returnCode == 0) fullCommand.print();
+                            if (returnCode == 0) fullCommand.print();
                             break;
                         }
                         reservedSize = 0;
                         break;
                     }
-                    if(commandNR == 1){
-                        while(c != '\n'){
-                            reservedSize = 0;
+                    if (commandNR == 1) {
+                        while (c != '\n') {
                             lastSectionArr = stringCommands.addchar(lastSectionArr, reservedSize, c);
-                            c = (char)getchar();
-                            if(c != '\n') fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
+                            c = (char) getchar();
+                            if (c != '\n') {
+                                fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
+                            }
                         }
                         reservedSize = 0;
                         lastValue = strtol(lastSectionArr, &pEnd, 10);
                         MyString fullCommand = fullCommandArr;
                         stringCommands.concatenate(&fullCommand, &equals);
-                        MyString* fullValue = dll->PrintJthSelector(tolS, lastValue);
-                        if(fullValue == nullptr) break;
+                        MyString *fullValue = dll->PrintJthSelector(tolS, lastValue);
+                        if (fullValue == nullptr) break;
                         returnCode = stringCommands.concatenate(&fullCommand, fullValue);
-                           if(returnCode == 0)  fullCommand.print();
+                        if (returnCode == 0) fullCommand.print();
                         break;
                     }
                 }
-                if(commandA){
-                    if(c == '?') {
+                if (commandA) {
+                    if (c == '?') {
                         if (commandNR == 3) {
                             MyString fullCommand = fullCommandArr;
                             stringCommands.concatenate(&fullCommand, &equals);
                             MyString fullValue = dll->NumberOfAttributes(tolA);
                             returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                               if(returnCode == 0)  fullCommand.print();
+                            if (returnCode == 0) fullCommand.print();
                             break;
                         }
                         if (commandNR == 4) {
+                            //TODO IMPLEMENT DUPLICATES SEARCH
+                            MyString fullCommand = fullCommandArr;
+                            stringCommands.concatenate(&fullCommand, &equals);
+                            MyString fullValue = dll->NumberOfAttributesSelectedByName(commandZ);
+                            returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
+                            if (returnCode == 0) fullCommand.print();
                             break;
                         }
                         reservedSize = 0;
                         break;
                     }
-                    if(commandNR == 3){
-                        while(c != '\n'){
-                            reservedSize = 0;
+                    if (commandNR == 3) {
+                        while (c != '\n') {
                             lastSectionArr = stringCommands.addchar(lastSectionArr, reservedSize, c);
-                            c = (char)getchar();
-                            if(c != '\n')  fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
+                            c = (char) getchar();
+                            if (c != '\n')
+                                fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
                         }
-                        reservedSize = 0;
                         MyString attributeName = lastSectionArr;
                         MyString fullCommand = fullCommandArr;
                         stringCommands.concatenate(&fullCommand, &equals);
-                        MyString* fullValue = dll->AttributeValueByName(attributeName, tolA);
-                        if(fullValue == nullptr) break;
+                        MyString *fullValue = dll->AttributeValueByName(attributeName, tolA);
+                        if (fullValue == nullptr) break;
                         returnCode = stringCommands.concatenate(&fullCommand, fullValue);
-                          if(returnCode == 0) fullCommand.print();
+                        if (returnCode == 0) fullCommand.print();
                         break;
                     }
                 }
+                if (commandE) {
+                    while (c != '\n') {
+                        lastSectionArr = stringCommands.addchar(lastSectionArr, reservedSize, c);
+                        c = (char) getchar();
+                        if (c != '\n') {
+                            fullCommandArr = stringCommands.addchar(fullCommandArr, thirdReservedSize, c);
+                        }
+                    }
+                    reservedSize = 0;
+                    MyString attributeName = lastSectionArr;
+                    MyString fullCommand = fullCommandArr;
+                    stringCommands.concatenate(&fullCommand, &equals);
+                    MyString *fullValue = dll->LastAttributeValueForSelector(attributeName, commandZ);
+                     if (fullValue == nullptr) break;
+                    returnCode = stringCommands.concatenate(&fullCommand, fullValue);
+                    if (returnCode == 0) fullCommand.print();
+                    break;
+                }
+                }
+                commandsArr = stringCommands.addchar(commandsArr, secondReservedSize, c);
             }
-            commandsArr = stringCommands.addchar(commandsArr, secondReservedSize, c);
+            secondReservedSize = 0;
+            reservedSize = 0;
+            if ((int) c == EOF) {
+                delete[] commandsArr;
+                delete[] lastSectionArr;
+                delete[] fullCommandArr;
+                return 0;
+            }
         }
-        secondReservedSize = 0;
-        reservedSize = 0;
-        if((int)c == EOF){
-            delete[] commandsArr;
-            delete[] lastSectionArr;
-            delete[] fullCommandArr;
-            return 0;
-        }
-    }
 }
 int ParseString::Parsing(DoubleLinkedList* dll) {
     while (true) {
