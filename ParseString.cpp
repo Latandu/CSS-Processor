@@ -243,9 +243,9 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
         int selcounter = 0;
         int searchReturnCode = 0;
         int attCounter = 0;
-        auto *select = new MyString[50];
-        auto *attri = new MyString[50];
-        auto *attriVal = new MyString[50];
+        auto *select = new MyString[40];
+        auto *attri = new MyString[40];
+        auto *attriVal = new MyString[40];
         int returnValue = 0;
         MyString myString;
         while ((c = (char) getchar()) != '{') {

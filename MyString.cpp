@@ -4,7 +4,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MyString.h"
 #include <iostream>
-#define BUFFER 100
+#define BUFFER 75
 MyString::MyString(const char* s) {
     if(s){
     size = strlen(s);
