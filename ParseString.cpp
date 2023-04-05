@@ -235,9 +235,9 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                         MyString attributeName = lastSectionArr;
                         MyString fullCommand = fullCommandArr;
                         stringCommands.concatenate(&fullCommand, &equals);
-                     //   MyString fullValue= dll->RemoveWholeSection(tolD);
-                    //    returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                    //    if (returnCode == 0) fullCommand.print();
+                        MyString fullValue= dll->RemoveWholeSection(tolD);
+                        returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
+                         if (returnCode == 0) fullCommand.print();
                         break;
                     }
                     while (c != '\n' && c != ',') {
@@ -249,9 +249,9 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                     MyString attributeName = lastSectionArr;
                     MyString fullCommand = fullCommandArr;
                     stringCommands.concatenate(&fullCommand, &equals);
-                //   MyString fullValue = dll->RemoveAttributeFromSectionByName(tolD, attributeName);
-                  //  returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
-                 //   if (returnCode == 0) fullCommand.print();
+                   MyString fullValue = dll->RemoveAttributeFromSectionByName(tolD, attributeName);
+                    returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
+                    if (returnCode == 0) fullCommand.print();
                     break;
                 }
                 }
@@ -270,6 +270,7 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
 }
 int ParseString::Parsing(DoubleLinkedList* dll) {
     while (true) {
+        int nException = 1;
         reservedSize = 0;
         char c;
         char *attributesArr = nullptr;
@@ -284,7 +285,10 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
         int returnValue = 0;
         MyString myString;
         while ((c = (char) getchar()) != '{') {
-            if(checkForWhiteSpaces(c)) continue;
+            if(c == '\t' || c == '\r') continue;
+            if( c =='\n' && nException == 1) continue;
+            if( c =='\n' && nException == 0) continue;
+            nException =0;
             if(c == '?'){
                 for(int i = 0; i < 3; i++){
                     c = (char)getchar();
@@ -312,12 +316,23 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
             }
             selectorsArr = selectors.addchar(selectorsArr, reservedSize, c);
         }
-        if(selectorsArr != nullptr) myString.trim(selectorsArr);
-        MyString selector(selectorsArr);
-        if(selcounter != 0) searchReturnCode = SearchSelector(select, &selector, selcounter);
-        if(searchReturnCode == 0){
-            select[selcounter] = selector;
-            selcounter++;
+        if(nException == 1){
+            selectorsArr = selectors.addchar(selectorsArr, reservedSize, ' ');
+            MyString selector(selectorsArr);
+            if(selcounter != 0) searchReturnCode = SearchSelector(select, &selector, selcounter);
+            if(searchReturnCode == 0){
+                select[selcounter] = selector;
+                selcounter++;
+            }
+        }
+        else{
+            if(selectorsArr != nullptr) myString.trim(selectorsArr);
+            MyString selector(selectorsArr);
+            if(selcounter != 0) searchReturnCode = SearchSelector(select, &selector, selcounter);
+            if(searchReturnCode == 0){
+                select[selcounter] = selector;
+                selcounter++;
+            }
         }
         selectorsArr = nullptr;
         reservedSize = 0;

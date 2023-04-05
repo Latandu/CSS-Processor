@@ -26,6 +26,7 @@ void DoubleLinkedList::InsertNodeAtTail() {
         newNode->nodeIndex = 1;
         newNode->prev = nullptr;
         head = newNode;
+        tail = newNode;
         delete[] newArrayBlock;
         return;
     }
@@ -36,12 +37,13 @@ void DoubleLinkedList::InsertNodeAtTail() {
     }
     tail->next = newNode;
     newNode->prev = tail;
+    tail = newNode;
     newNode->nodeIndex = counter;
     delete[] newArrayBlock;
 }
 void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal, int attlistCounter, int selListCounter) {
     struct Node *selectorNode;
-    if(!tail) selectorNode = head;
+    if(tail == nullptr) selectorNode = head;
     else selectorNode = tail;
     while(selectorNode){
         for(int i = 0; i < T; i++){
@@ -66,7 +68,6 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
         }
         selectorNode = selectorNode->next;
     }
-    tail = selectorNode;
     InsertNodeAtTail();
     InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, attlistCounter, selListCounter);
     delete selectorNode;
@@ -251,7 +252,7 @@ MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attrib
     }
     return nullptr;
 }
-/*MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
+MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
     MyString exitString = "deleted";
     MyString exitStringFail = "-1";
     int counter = 0;
@@ -342,7 +343,7 @@ MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyStr
         curr = curr->next;
     }
     return exitStringFail;
-}*/
+}
 DoubleLinkedList::~DoubleLinkedList(){
     Node* current = head;
     while (current != nullptr) {

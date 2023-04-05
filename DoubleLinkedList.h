@@ -55,6 +55,7 @@ public:
     MyString RemoveWholeSection(int sectionNo);
 
     MyString RemoveAttributeFromSectionByName(int sectionNo, MyString attributeName);
+
 };
 
 
