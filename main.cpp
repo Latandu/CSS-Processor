@@ -4,7 +4,7 @@
 #include "SingleLinkedList.h"
 #include "ParseString.h"
 
-
+#define STATUS_HEAP_CORRUPTION           ((NTSTATUS)0xC0000374L)
 int main() {
     DoubleLinkedList dll;
     ParseString parse;

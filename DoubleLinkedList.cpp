@@ -39,7 +39,6 @@ void DoubleLinkedList::InsertNodeAtTail() {
     newNode->prev = tail;
     tail = newNode;
     newNode->nodeIndex = counter;
-    delete[] newArrayBlock;
 }
 void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal, int attlistCounter, int selListCounter) {
     struct Node *selectorNode;
@@ -70,7 +69,6 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
     }
     InsertNodeAtTail();
     InsertSelectorAttributesIntoNode(newSelector, newAttribute, newAttributeVal, attlistCounter, selListCounter);
-    delete selectorNode;
 }
 
 void DoubleLinkedList::RemoveNode(short index) {
@@ -195,7 +193,7 @@ MyString* DoubleLinkedList::AttributeValueByName(const MyString& attributeName, 
         for(int i = 0; i < T; i++){
             if(!curr->arrayBlock[i].isWritten) continue;
             if(curr->arrayBlock[i].arraySectionCounter == sectionNo){
-                struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
+               struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
                 while(curr2){
                     if(curr2->attributes->compare(attributeName)){
                         return curr2->attValues;
@@ -255,89 +253,97 @@ MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attrib
 MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
     MyString exitString = "deleted";
     MyString exitStringFail = "-1";
-    int counter = 0;
-    short deleted = 0;
-    int success = 0;
     struct Node* curr = head;
-    struct Node* awaitingDeletion = nullptr;
     while(curr){
+        int counter = 0;
         for(int i = 0; i < T; i++){
             if(!curr->arrayBlock[i].isWritten) continue;
             else counter++;
-            if(deleted == 1){
-                curr->arrayBlock[i].arraySectionCounter = curr->arrayBlock[i].arraySectionCounter - deleted;
-
-            }
-            if(curr->arrayBlock[i].arraySectionCounter == sectionNo && deleted == 0) {
-                delete curr->arrayBlock[i].selectors;
-                delete curr->arrayBlock[i].attributes;
+            if(curr->arrayBlock[i].arraySectionCounter == sectionNo) {
+                curr->arrayBlock[i].selectors = nullptr;
+                curr->arrayBlock[i].attributes = nullptr;
                 curr->arrayBlock[i].arraySectionCounter = 0;
                 curr->arrayBlock[i].isWritten = false;
-                deleted++;
-                sectionCounter = sectionCounter - deleted;
-                success = 1;
-                continue;
+                sectionCounter = sectionCounter - 1;
+                if (counter == 1) {
+                    for (; i < T; i++) {
+                        if (curr->arrayBlock[i].isWritten) {
+                            int j = i;
+                            while (curr) {
+                                for (; j < T; j++) {
+                                    if(curr->arrayBlock[i].isWritten) curr->arrayBlock[i].arraySectionCounter =
+                                            curr->arrayBlock[i].arraySectionCounter - 1;
+                                }
+                                j = 0;
+                                curr = curr->next;
+                            }
+                            return exitString;
+                        } else continue;
+                    }
+                    if (head == curr) head = curr->next;
+                    if (curr->next != nullptr) curr->next->prev = curr->prev;
+                    if (curr->prev != nullptr) curr->prev->next = curr->next;
+                    return exitString;
+                }
+                while (curr) {
+                    for(; i < T; i++){
+                        if(curr->arrayBlock[i].isWritten)
+                            curr->arrayBlock[i].arraySectionCounter = curr->arrayBlock[i].arraySectionCounter - 1;
+                    }
+                    curr = curr->next;
+                    i = 0;
+                }
+                return exitString;
             }
-        }
-        if(counter == 1){
-            if(head == curr) head = curr->next;
-            if(curr->next != nullptr) curr->next->prev = curr->prev;
-            if(curr->prev != nullptr) curr->prev->next = curr->next;
-            awaitingDeletion = curr;
         }
         curr = curr->next;
     }
-    delete awaitingDeletion;
-    if(success == 1) return exitString;
     return exitStringFail;
 }
 MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyString attributeName){
     MyString exitString = "deleted";
     MyString exitStringFail = "-1";
-    int deleted = 0;
-    int success = 0;
     struct Node* curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
-            if(!curr->arrayBlock[i].isWritten) continue;
+           if(!curr->arrayBlock[i].isWritten) continue;
             if(curr->arrayBlock[i].arraySectionCounter == sectionNo) {
                 struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
                 struct SSLAtt::SingleNode *prev = nullptr;
                 while(curr2){
-                    if(deleted == 0){
-                        if(curr2->attributes->compare(attributeName)){
-                            if(nullptr == curr->arrayBlock[i].attributes->tail){
-                                delete curr->arrayBlock[i].selectors;
-                                delete curr->arrayBlock[i].attributes;
-                                deleted++;
-                                success = 1;
-                                sectionCounter--;
-                            }
-                            else if(prev == nullptr){
-                                curr2 = curr2->next;
-                                deleted++;
-                                success = 1;
-                                sectionCounter--;
-                            }
-                            else {
-                                prev->next = curr2->next;
-                                if (prev->next == nullptr) {
-                                    curr2 = prev;
-                                }
-                                deleted++;
-                                success = 1;
-                                sectionCounter--;
-                            }
+                    if(curr2->attributes->compare(attributeName)){
+                        if(curr2->next == nullptr && prev == nullptr){
+                            RemoveWholeSection(sectionNo);
+                            return exitString;
+
                         }
-                    }
-                    else{
-                        curr2->attCounter = curr2->attCounter - 1;
+                        else if(prev == nullptr){
+                            curr->arrayBlock[i].attributes->head = curr2->next;
+                            curr2->next = nullptr;
+                            while(curr2){
+                                curr2->attCounter = curr2->attCounter - 1;
+                                curr2 = curr2->next;
+                            }
+                            return exitString;
+
+                        }
+                        else {
+                            prev->next = curr2->next;
+                            if (prev->next == nullptr) {
+                                curr2 = prev;
+                            }
+                            while(curr2){
+                                curr2->attCounter = curr2->attCounter - 1;
+                                curr2 = curr2->next;
+                            }
+                            return exitString;
+
+                        }
                     }
                     prev = curr2;
                     curr2 = curr2->next;
                 }
-                if(success == 1) return exitString;
-                else return exitStringFail;
+                return exitStringFail;
             }
         }
         curr = curr->next;

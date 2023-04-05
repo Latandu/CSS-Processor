@@ -65,7 +65,7 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
         bool commandD = false;
         int returnValue = 0;
         while ((c = (char) getchar()) != '\n') {
-            if ((int) (int) c == EOF) break;
+            if ((int) (int) c == '~') break;
             if (c == '*') {
                 for (int i = 0; i < 3; i++) {
                     c = (char) getchar();
@@ -249,7 +249,7 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
                     MyString attributeName = lastSectionArr;
                     MyString fullCommand = fullCommandArr;
                     stringCommands.concatenate(&fullCommand, &equals);
-                   MyString fullValue = dll->RemoveAttributeFromSectionByName(tolD, attributeName);
+                    MyString fullValue = dll->RemoveAttributeFromSectionByName(tolD, attributeName);
                     returnCode = stringCommands.concatenate(&fullCommand, &fullValue);
                     if (returnCode == 0) fullCommand.print();
                     break;
@@ -260,7 +260,7 @@ int ParseString::ParseCommands(DoubleLinkedList* dll){
             secondReservedSize = 0;
             reservedSize = 0;
             thirdReservedSize = 0;
-            if ((int) c == EOF) {
+            if ((int) c == '~') {
                 delete[] commandsArr;
                 delete[] lastSectionArr;
                 delete[] fullCommandArr;
@@ -302,7 +302,7 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
                 return 2;
             }
 
-            if ((int)c == EOF) break;
+            if ((int)c == '~') break;
             if (c == ',') {
                 MyString selector(selectorsArr);
                 if(selcounter != 0) searchReturnCode = SearchSelector(select, &selector, selcounter);
@@ -336,18 +336,18 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
         }
         selectorsArr = nullptr;
         reservedSize = 0;
-        if ((int)c == EOF) break;
+        if ((int)c == '~') break;
         while (true) {
             while ((c = (char)getchar()) != ':' && c != '}'){
-                if ((int)c == EOF) break;
+                if ((int)c == '~') break;
                 if(checkForWhiteSpaces(c)) continue;
                 attributesArr = attributes.addchar(attributesArr, reservedSize, c);
             }
             reservedSize = 0;
-            if ((int)c == EOF || c == '}') break;
+            if ((int)c == '~' || c == '}') break;
             int i = 0;
             while ((c = (char) getchar())!= '}' && c != ';') {
-                if ((int)c == EOF) break;
+                if ((int)c == '~') break;
                 if(checkForWhiteSpaces(c)) continue;
                 attributesValueArr = attributesValues.addchar(attributesValueArr, reservedSize, c);
                 i++;
@@ -366,14 +366,14 @@ int ParseString::Parsing(DoubleLinkedList* dll) {
             attributesArr = nullptr;
             attributesValueArr = nullptr;
             reservedSize = 0;
-            if ((int)c == EOF) break;
+            if ((int)c == '~') break;
             if (c == '}') break;
         }
 
 
         dll->InsertSelectorAttributesIntoNode(select, attri, attriVal, attCounter, selcounter);
         reservedSize = 0;
-        if ((int)c == EOF){
+        if ((int)c == '~'){
             delete[] selectorsArr;
             delete[] attributesValueArr;
             delete[] attributesArr;
