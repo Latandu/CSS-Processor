@@ -1,10 +1,10 @@
 
-#include "MyString.h"
-#include "DoubleLinkedList.h"
-#include "SingleLinkedList.h"
-#include "ParseString.h"
+#include "mystring.h"
+#include "doublelinkedlist.h"
+#include "singlelinkedlist.h"
+#include "parsestring.h"
 
-#define STATUS_HEAP_CORRUPTION           ((NTSTATUS)0xC0000374L)
+
 int main() {
     DoubleLinkedList dll;
     ParseString parse;
