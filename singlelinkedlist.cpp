@@ -8,12 +8,14 @@ SingleLinkedList::SingleLinkedList(): head(nullptr), tail() {}
 
 void SingleLinkedList::InsertNodeAtTail(MyString* newSelector) {
     auto* newNode = new struct SingleNode();
+    MyString tylda = "~";
     newNode->data = newSelector;
     newNode->next = nullptr;
     if(!head){
         newNode->next = nullptr;
         head = newNode;
-        if(!newNode->data->compare("~")){
+
+        if(!newNode->data->compare(tylda)){
             newNode->selectorCounter = 1;
         }
         return;
@@ -23,7 +25,7 @@ void SingleLinkedList::InsertNodeAtTail(MyString* newSelector) {
         tail = tail->next;
     }
     tail->next = newNode;
-    if(!newNode->data->compare("~")){
+    if(!newNode->data->compare(tylda)){
         newNode->selectorCounter = tail->selectorCounter + 1;
     }
 

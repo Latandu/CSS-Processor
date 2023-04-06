@@ -42,13 +42,13 @@ public:
 
     MyString NumberOfAttributes(int sectionNo);
 
-    MyString* AttributeValueByName(const MyString& attributeName, int sectionNo);
+    MyString AttributeValueByName(const MyString& attributeName, int sectionNo);
 
     MyString NumberOfAttributesSelectedByName(MyString attributeName);
 
     MyString SearchForSelectorsByName(const MyString& selectorName);
 
-    MyString* LastAttributeValueForSelector(const MyString &attributeName, const MyString &selector);
+    MyString LastAttributeValueForSelector(const MyString &attributeName, const MyString &selector);
 
     MyString RemoveWholeSection(int sectionNo);
 

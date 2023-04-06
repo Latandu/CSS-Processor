@@ -5,15 +5,10 @@
 #include "MyString.h"
 #include "DoubleLinkedList.h"
 #include <iostream>
+#define _CRT_SECURE_NO_WARNINGS
 #define T 8
 DoubleLinkedList::DoubleLinkedList() : head(nullptr), tail(){
 }
-/*void DoubleLinkedList::InsertNodeAtFront(MyString* newValue) {
-    auto* newNode = new Node();
-    newNode->data = newValue;
-    newNode->next = head;
-    head = newNode;
-}*/
 void DoubleLinkedList::InsertNodeAtTail() {
     auto* newArrayBlock = new ArrayBlock[T];
     auto* newNode = new Node();
@@ -41,7 +36,7 @@ void DoubleLinkedList::InsertNodeAtTail() {
     newNode->nodeIndex = counter;
     delete[] newArrayBlock;
 }
-void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, MyString *newAttribute,MyString *newAttributeVal, int attlistCounter, int selListCounter) {
+void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString newSelector[], MyString newAttribute[],MyString newAttributeVal[], int attlistCounter, int selListCounter) {
     struct Node *selectorNode;
     if(tail == nullptr) selectorNode = head;
     else selectorNode = tail;
@@ -75,7 +70,6 @@ void DoubleLinkedList::InsertSelectorAttributesIntoNode(MyString *newSelector, M
 
 MyString DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
     struct Node *curr = head;
-    MyString numbersExit = "-1";
     while(curr){
         for(int i = 0; i < T; i++){
             if(!curr->arrayBlock[i].isWritten) continue;
@@ -86,7 +80,7 @@ MyString DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
                     curr2 = curr2->next;
                 }
                 char s[11];
-                sprintf_s(s, "%d", curr2->selectorCounter);
+                sprintf(s, "%d", curr2->selectorCounter);
                 MyString number = s;
                 return number;
         }
@@ -95,12 +89,10 @@ MyString DoubleLinkedList::PrintNumberOfSelectors(int sectionNo) {
      }
         curr = curr->next;
     }
-    return numbersExit;
+    return {"-1"};
 }
 MyString DoubleLinkedList::PrintJthSelector(int sectionNo, int selectorNo){
     struct Node *curr = head;
-    MyString numbersExit = "-1";
-    MyString number0 = "0";
     while(curr){
         for(int i = 0; i < T; i++){
             if(!curr->arrayBlock[i].isWritten) continue;
@@ -108,23 +100,24 @@ MyString DoubleLinkedList::PrintJthSelector(int sectionNo, int selectorNo){
                 struct SingleLinkedList::SingleNode *curr2 = curr->arrayBlock[i].selectors->head;
                 while(curr2){
                     if(curr2->selectorCounter == selectorNo){
+                        if(curr2->data[0].printarr() == nullptr) return {"0"};
                         if(*curr2->data[0].printarr() == '~'){
-                            return number0;
+                            return {"0"};
                         }
                         return *curr2->data;
                     }
                     curr2 = curr2->next;
                 }
-                return numbersExit;
+                return {"-1"};
             }
         }
         curr = curr->next;
     }
-    return numbersExit;
+    return {"-1"};
 }
 MyString DoubleLinkedList::PrintNumberOfSections(){
     char s[11];
-    sprintf_s(s, "%d", sectionCounter - 1);
+    sprintf(s, "%d", sectionCounter - 1);
     MyString number = s;
     return number;
 }
@@ -145,15 +138,13 @@ MyString DoubleLinkedList::SearchForSelectorsByName(const MyString& selectorName
         curr = curr->next;
     }
     char s[11];
-    sprintf_s(s, "%d", x);
+    sprintf(s, "%d", x);
     MyString number = s;
     return number;
 }
 
 MyString DoubleLinkedList::NumberOfAttributes(int sectionNo){
     int x = 0;
-    MyString number;
-    MyString numbersExit = "-1";
     struct Node* curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
@@ -165,19 +156,16 @@ MyString DoubleLinkedList::NumberOfAttributes(int sectionNo){
                     curr2 = curr2->next;
                 }
                 char s[11];
-                sprintf_s(s, "%d", x);
-                number = s;
+                sprintf(s, "%d", x);
+                MyString number = s;
                 return number;
             }
         }
         curr = curr->next;
     }
-    return numbersExit;
+    return {"-1"};
 }
-/*void DoubleLinkedList::NumberOfAttributesName(MyString *selectorName){
-
-}*/
-MyString* DoubleLinkedList::AttributeValueByName(const MyString& attributeName, int sectionNo){
+MyString DoubleLinkedList::AttributeValueByName(const MyString& attributeName, int sectionNo){
     struct Node* curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
@@ -186,7 +174,7 @@ MyString* DoubleLinkedList::AttributeValueByName(const MyString& attributeName, 
                 struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
                 while(curr2){
                     if(curr2->attributes->compare(attributeName)){
-                        return curr2->attValues;
+                        return *curr2->attValues;
                     }
                     curr2 = curr2->next;
                 }
@@ -194,7 +182,7 @@ MyString* DoubleLinkedList::AttributeValueByName(const MyString& attributeName, 
         }
         curr = curr->next;
     }
-    return nullptr;
+    return {"-1"};
 }
 MyString DoubleLinkedList::NumberOfAttributesSelectedByName(MyString attributeName){
     int x = 0;
@@ -214,11 +202,11 @@ MyString DoubleLinkedList::NumberOfAttributesSelectedByName(MyString attributeNa
         curr = curr->next;
     }
     char s[11];
-    sprintf_s(s, "%d", x);
+    sprintf(s, "%d", x);
     MyString number = s;
     return number;
 }
-MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attributeName, const MyString& selector){
+MyString DoubleLinkedList::LastAttributeValueForSelector(const MyString& attributeName, const MyString& selector){
     struct Node* curr = tail;
     if(tail == nullptr) curr = head;
         while(curr){
@@ -230,7 +218,8 @@ MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attrib
                 struct SSLAtt::SingleNode *curr2 = curr->arrayBlock[i].attributes->head;
                 while(curr2){
                     if(curr2->attributes->compare(attributeName)){
-                        return curr2->attValues;
+                        MyString returnValue = *curr2->attValues;
+                        return returnValue;
                     }
                         curr2 = curr2->next;
                 }
@@ -238,11 +227,9 @@ MyString* DoubleLinkedList::LastAttributeValueForSelector(const MyString& attrib
         }
         curr=curr->prev;
     }
-    return nullptr;
+    return {"-1"};
 }
 MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
-    MyString exitString = "deleted";
-    MyString exitStringFail = "-1";
     struct Node* curr = head;
     while(curr){
         int counter = 0;
@@ -264,7 +251,7 @@ MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
                         }
                         curr = curr->next;
                     }
-                    return exitString;
+                    return {"deleted"};
                 }
                 while (curr) {
                     for(int j = 0; j < T; j++){
@@ -273,16 +260,14 @@ MyString DoubleLinkedList::RemoveWholeSection(int sectionNo){
                     }
                     curr = curr->next;
                 }
-                return exitString;
+                return {"deleted"};
             }
         }
         curr = curr->next;
     }
-    return exitStringFail;
+    return {"-1"};
 }
 MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyString attributeName){
-    MyString exitString = "deleted";
-    MyString exitStringFail = "-1";
     struct Node* curr = head;
     while(curr){
         for(int i = 0; i < T; i++){
@@ -294,7 +279,7 @@ MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyStr
                     if(curr2->attributes->compare(attributeName)){
                         if(curr2->next == nullptr && prev == nullptr){
                             RemoveWholeSection(sectionNo);
-                            return exitString;
+                            return {"deleted"};
 
                         }
                         else if(prev == nullptr){
@@ -304,7 +289,7 @@ MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyStr
                                 curr2->attCounter = curr2->attCounter - 1;
                                 curr2 = curr2->next;
                             }
-                            return exitString;
+                            return {"deleted"};
 
                         }
                         else {
@@ -316,19 +301,19 @@ MyString DoubleLinkedList::RemoveAttributeFromSectionByName(int sectionNo, MyStr
                                 curr2->attCounter = curr2->attCounter - 1;
                                 curr2 = curr2->next;
                             }
-                            return exitString;
+                            return {"deleted"};
 
                         }
                     }
                     prev = curr2;
                     curr2 = curr2->next;
                 }
-                return exitStringFail;
+                return {"-1"};
             }
         }
         curr = curr->next;
     }
-    return exitStringFail;
+    return {"-1"};
 }
 DoubleLinkedList::~DoubleLinkedList(){
     Node* current = head;

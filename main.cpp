@@ -3,7 +3,7 @@
 #include "doublelinkedlist.h"
 #include "singlelinkedlist.h"
 #include "parsestring.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 
 int main() {
     DoubleLinkedList dll;

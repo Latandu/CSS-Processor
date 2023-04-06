@@ -11,6 +11,10 @@ MyString::MyString(const char* s) {
     str = new char[size + 1];
     strcpy(str, s);
     }
+    else{
+        size = 0;
+        str = nullptr;
+    }
 }
 
 MyString::MyString(const MyString& other) {
@@ -20,16 +24,23 @@ MyString::MyString(const MyString& other) {
 }
 
 MyString::~MyString() {
+  delete[] str;
 }
 
-char *MyString::addchar(char *str, int& reservedSize, char newChar) {
-    char* newStr = nullptr;
-    int len = strlen(str);
+char* MyString::addchar(char* str, int& reservedSize, char newChar) {
+    char* newStr;
+    int len = 0;
+    if (str != nullptr) {
+        len = strlen(str);
+    }
     if (len + 2 > reservedSize) {
         reservedSize += BUFFER;
         newStr = new char[reservedSize];
         if (str != nullptr) {
-            strcpy(newStr, str);
+            for (int i = 0; i < len; i++) {
+                newStr[i] = str[i];
+            }
+            delete[] str;
         }
         else {
             newStr[0] = '\0';
@@ -42,21 +53,8 @@ char *MyString::addchar(char *str, int& reservedSize, char newChar) {
     newStr[len + 1] = '\0';
     return newStr;
 }
-int MyString::strlen(const char* s){
-    if(s == nullptr) return 0;
-    int i = 0;
-    while(s[i] != '\0'){
-        i++;
-    }
-    return i;
-
-}
-int MyString::concatenate(MyString *str1, MyString* str2){
-    if(str2->compare("-1")) return 1;
-    strcat(str1->printarr(), str2->printarr());
-    return 0;
-}
 bool MyString::compare(const MyString& other) const {
+    if(other.str == nullptr) return false;
     if (size != other.size) {
         return false;
     }
@@ -67,20 +65,20 @@ bool MyString::compare(const MyString& other) const {
     }
     return true;
 }
-void MyString::trim(char* str){
+void MyString::trim(char* str1){
     int i = 0, j = 0;
-    while(str[i] == ' '){
+    while(str1[i] == ' '){
         i++;
     }
-    while(str[i] != '\0'){
-        str[j] = str[i];
+    while(str1[i] != '\0'){
+        str1[j] = str1[i];
         i++; j++;
     }
     j--;
-    while(str[j] == ' '){
+    while(str1[j] == ' '){
         j--;
     }
-    str[j + 1] = '\0';
+    str1[j + 1] = '\0';
 }
 char* MyString::strcpy(char* str, const char* s){
     char* ptr = str;
@@ -97,8 +95,6 @@ char* MyString::printarr(){
     return str;
 }
 
-MyString::MyString() {
-
-}
+MyString::MyString() = default;
 
 
